@@ -1,61 +1,18 @@
-/*Disclaimer: esta classe foi projetada para rodar em versões antigas do Java, conforme
-recomendação do professor de que seja utilizada a versão 1.8, isso pode ocasionar em warnings
-caso o código seja rodado em versões acima da 8.0.*/
 package dados;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Email {
     private int id;
     private String corpo;
+    private String assunto;
     private String remetente;
     private String destinatario;
     private static int proximoId = 1;
 
-    long timestamp = System.currentTimeMillis();
-    Date data = new Date(timestamp);
-    public int dia = data.getDate();
-    private String diaFormatado = String.format("%02d", dia);
-    public String getDiaFormatado() {
-        return diaFormatado;
-    }
-
-    public void setDiaFormatado(String diaFormatado) {
-        this.diaFormatado = diaFormatado;
-    }
-
-    public int mes = data.getMonth() + 1;
-    private String mesFormatado = String.format("%02d", mes);
-
-    public String getMesFormatado() {
-        return mesFormatado;
-    }
-
-    public void setMesFormatado(String mesFormatado) {
-        this.mesFormatado = mesFormatado;
-    }
-
-    public int ano = data.getYear() + 1900;
-    public int horas = data.getHours();
-    private String horaFormatada = String.format("%02d", horas);
-    public String getHoraFormatada() {
-        return horaFormatada;
-    }
-
-    public void setHoraFormatada(String horaFormatada) {
-        this.horaFormatada = horaFormatada;
-    }
-
-    public int minutos = data.getMinutes();
-    private String minutosFormatados = String.format("%02d", minutos);
-
-    public String getMinutosFormatados() {
-        return minutosFormatados;
-    }
-
-    public void setMinutosFormatados(String minutosFormatados) {
-        this.minutosFormatados = minutosFormatados;
-    }
+    LocalDateTime data = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm");
 
     public Email(String remetente, String destinatario, String corpo) {
         this.id = proximoId;
@@ -63,6 +20,12 @@ public class Email {
         this.remetente = remetente;
         this.destinatario = destinatario;
         this.corpo = corpo;
+    }
+
+    private String diaFormatado = String.format("%02d", data.getDayOfMonth());
+
+    public String getDiaFormatado() {
+        return diaFormatado;
     }
 
     public String getCorpo() {
@@ -92,9 +55,13 @@ public class Email {
     public int getId() {
             return id;
     }
+    
+    public String getAssunto() {
+        return assunto;
+    }
 
-    public void setId(int id) {
-            this.id = id;
+    public void setAssunto(String assunto) {
+        this.assunto = assunto;
     }
     
     public String criptografar(String textoRecebido){
@@ -125,5 +92,9 @@ public class Email {
             textoDescriptografado += letra;
         }
         return textoDescriptografado;
+    }
+
+    public String getDataFormatada() {
+        return data.format(formatter);
     }
 }
