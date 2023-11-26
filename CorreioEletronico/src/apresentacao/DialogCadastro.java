@@ -22,6 +22,7 @@ public class DialogCadastro extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+        setResizable(false);
 
         JPanel panel = new JPanel(null);
        

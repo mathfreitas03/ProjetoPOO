@@ -6,6 +6,9 @@ import dados.Usuario;
 import exceptions.InvalidNickException;
 import exceptions.NotEnoughCaractersException;
 import exceptions.UserAlreadySignedException;
+import persistencia.EmailDAO;
+import persistencia.UsuarioDAO;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,7 +16,9 @@ import java.util.regex.Matcher;
 
 public class Sistema {
     private static List<Usuario> listaDeUsuarios = new ArrayList<>();
-
+    private UsuarioDAO usuarioDAO;
+    private EmailDAO emailDAO;
+    
     public static List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
@@ -22,13 +27,20 @@ public class Sistema {
 
     public static Sistema getInstance() {
         if (instance == null) {
-            instance = new Sistema();
+            try {
+                instance = new Sistema();
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
 
-    public Sistema() {
+    public Sistema() throws ClassNotFoundException, SQLException {
+        usuarioDAO = new UsuarioDAO();
+        emailDAO = new EmailDAO();
         listaDeUsuarios = new ArrayList<>();
+        listaDeUsuarios = usuarioDAO.listarUsuarios();
     }
 
     public boolean cadastrarUsuario(String email, String senha, String nome) throws InvalidNickException, NotEnoughCaractersException, UserAlreadySignedException{
@@ -49,37 +61,47 @@ public class Sistema {
                 throw new UserAlreadySignedException();
             }
         }
+
         Usuario u = new Usuario();
         u.setEmailPessoal(email);
         u.setNome(nome);
         u.setSenha(senha);
-        listaDeUsuarios.add(u);
+        usuarioDAO.inserirUsuario(u);
         return true;
     }
 
     public boolean verificarLogin(String email, String password) {
-        for (Usuario usuario : listaDeUsuarios) {
-            if (usuario.getEmailPessoal().equals(email) && usuario.getSenha().equals(password)) {
-                return true;
-                }
-            }
-        return false;
-        }
+        Usuario usuario = usuarioDAO.verificarLogin(email, password);
+        return usuario != null;
+    }
     
     public void enviarEmail(String remetente, String destinatario, String assunto, String corpo) {
         Email novoEmail = new Email(remetente, destinatario, corpo);
         novoEmail.setAssunto(assunto);
+        Usuario usuarioDestinatario = usuarioDAO.buscarUsuarioPorEmail(destinatario);
         
-        for (Usuario usuario : listaDeUsuarios) {
-            if (usuario.getEmailPessoal().equals(destinatario)) {
-                novoEmail.setCorpo(novoEmail.criptografar(corpo));
-                usuario.getEmails().add(novoEmail); 
-            }
+        if (usuarioDestinatario != null) {
+            novoEmail.setIdUsuario(usuarioDestinatario.getId());
+            emailDAO.inserirEmail(novoEmail);
         }
     }
 
-    public static void main(String[] args) {
-        Login login = new Login();
-        login.setVisible(true);
+    public void excluirEmail(int id){
+        emailDAO.excluirEmail(id);
+    }
+
+    public static void main(String[] args) throws SQLException {
+        try {
+            Login login;
+            try {
+                login = new Login();
+                login.setVisible(true);
+            } catch (ClassNotFoundException e) {
+                
+                e.printStackTrace();
+            }
+        } finally {
+            //Conexao.fecharConexao();
+        }
     }
 }

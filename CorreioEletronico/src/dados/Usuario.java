@@ -1,10 +1,10 @@
 package dados;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Usuario {
+    private int id;
     private String nome;
     private String senha;
     private List<Email> emails;
@@ -12,6 +12,14 @@ public class Usuario {
 
     public Usuario() {
         emails = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmailPessoal() {
@@ -49,16 +57,4 @@ public class Usuario {
     public void adicionarEmail(Email email) {
         emails.add(email);
     }
-
-    public void apagarEmailRecebido(int idSelected) {
-        Iterator<Email> iterator = emails.iterator();
-        while (iterator.hasNext()) {
-            Email email = iterator.next();
-            if (idSelected == email.getId()) {
-                iterator.remove();
-                return;
-            }
-        }
-    }
-
 }

@@ -66,6 +66,7 @@ public class DialogEnviarEmail extends JDialog {
                     throw new EmailToYourselfException("Não é possível enviar um email para si mesmo");
                 } else {
                     sistema.enviarEmail(usuario.getEmailPessoal(), destinatario, assunto, mensagem);
+                    JOptionPane.showMessageDialog(null, "Email enviado com sucesso");
                 }
                 } catch (EmailToYourselfException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -134,6 +135,7 @@ public class DialogEnviarEmail extends JDialog {
                 }
                 else{
                     sistema.enviarEmail(usuario.getEmailPessoal(), destinatario, assunto, mensagem);
+                    JOptionPane.showMessageDialog(null, "Email enviado com sucesso");
                 }
             }
         });

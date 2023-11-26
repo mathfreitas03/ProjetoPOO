@@ -5,11 +5,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import negocio.Sistema;
 
 public class Login extends JFrame{
     Sistema sistema = Sistema.getInstance();
-    public Login() {
+    public Login() throws ClassNotFoundException, SQLException {
         Sistema sistema = Sistema.getInstance();
         final int DEFAULT_WIDTH = 800;
         final int DEFAULT_HEIGHT = 500;
@@ -83,10 +85,12 @@ public class Login extends JFrame{
                             usuario.setNome(u.getNome());
                         }
                     }
-                    
-                    Principal principal = new Principal(usuario);
-                    principal.setVisible(true);
-                    principal.atualizarListaEmails();
+                    try {
+                        Principal principal = new Principal(usuario);
+                        principal.setVisible(true);
+                        principal.atualizarListaEmails();
+                    } catch (ClassNotFoundException | SQLException e1) {
+                    }  
                     
                 }
                 else

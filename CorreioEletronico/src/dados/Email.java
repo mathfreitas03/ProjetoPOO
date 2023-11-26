@@ -1,30 +1,61 @@
 package dados;
 
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Email {
     private int id;
+    private int idUsuario;
     private String corpo;
     private String assunto;
     private String remetente;
     private String destinatario;
-    private static int proximoId = 1;
+    private int diaFormatado;
+    
+    public Email(){}
+
+    public void setDiaFormatado(int diaFormatado) {
+        this.diaFormatado = diaFormatado;
+    }
 
     LocalDateTime data = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy, HH:mm");
 
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
+    public LocalDateTime getData(){
+        return data;
+    }
+
+    public String getDataFormatada() {
+        return data.format(formatter);
+    }
+
     public Email(String remetente, String destinatario, String corpo) {
-        this.id = proximoId;
-        proximoId++;
         this.remetente = remetente;
         this.destinatario = destinatario;
         this.corpo = corpo;
     }
 
-    private String diaFormatado = String.format("%02d", data.getDayOfMonth());
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getDiaFormatado() {
+    public int getId() {
+            return id;
+    }
+    
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    public int getDiaFormatado() {
         return diaFormatado;
     }
 
@@ -51,11 +82,7 @@ public class Email {
     public void setDestinatario(String destinatario) {
         this.destinatario = destinatario;
     }
-
-    public int getId() {
-            return id;
-    }
-    
+   
     public String getAssunto() {
         return assunto;
     }
@@ -64,11 +91,11 @@ public class Email {
         this.assunto = assunto;
     }
     
-    public String criptografar(String textoRecebido){
+    public String criptografar(int id, String textoRecebido){
         String stringId = Integer.toString(id);
         char charId = stringId.charAt(stringId.length()-1);
         int unidadeId = Character.getNumericValue(charId);
-        int deslocamento = unidadeId + Integer.parseInt(getDiaFormatado());
+        int deslocamento = unidadeId + getDiaFormatado();
         String textoCriptografado = "";
 
         for(int n = textoRecebido.length() - 1; n >= 0; n--){
@@ -79,11 +106,11 @@ public class Email {
         return textoCriptografado;
     }
 
-    public String descriptografar(String textoRecebido){
+    public String descriptografar(int id, String textoRecebido){
         String stringId = Integer.toString(id);
         char charId = stringId.charAt(stringId.length()-1);
         int unidadeId = Character.getNumericValue(charId);
-        int deslocamento = unidadeId + Integer.parseInt(getDiaFormatado());
+        int deslocamento = unidadeId + getDiaFormatado();
         String textoDescriptografado = "";
 
         for(int n = textoRecebido.length() - 1; n >= 0; n--){
@@ -94,7 +121,4 @@ public class Email {
         return textoDescriptografado;
     }
 
-    public String getDataFormatada() {
-        return data.format(formatter);
-    }
 }

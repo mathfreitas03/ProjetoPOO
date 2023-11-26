@@ -38,7 +38,7 @@ public class VisualizarEmail extends JFrame{
         labelRemetente.setFont(fonte);
         labelAssunto.setFont(fonte);
 
-        JTextArea mensagemTextArea = new JTextArea("Mensagem: " + mail.descriptografar(mail.getCorpo()));
+        JTextArea mensagemTextArea = new JTextArea(mail.getCorpo()/*.descriptografar(mail.getCorpo())*/);
         mensagemTextArea.setLineWrap(true);
         mensagemTextArea.setWrapStyleWord(true);
         mensagemTextArea.setEditable(false);
@@ -49,7 +49,7 @@ public class VisualizarEmail extends JFrame{
         labelRemetente.setBounds(10, 20, 200, 40);
         remetente.setBounds(115, 20, 200, 40);
         labelAssunto.setBounds(10, 50, 400, 40);
-        mensagemTextArea.setBounds(10, 90, 600, 300);
+        mensagemTextArea.setBounds(10, 90, 580, 300);
         botaoResponderEmail.setBounds(10, 400, 100, 30);
         botaoExcluirEmail.setBounds(120, 400, 100, 30);
 
@@ -69,7 +69,7 @@ public class VisualizarEmail extends JFrame{
         public void actionPerformed(ActionEvent e){
             int resposta = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja apagar este email?", "Confirmação", JOptionPane.YES_NO_OPTION);
                 if (resposta == JOptionPane.YES_OPTION) {
-                usuario.apagarEmailRecebido(mail.getId());
+                sistema.excluirEmail(mail.getId());
                 dispose();
                 }
             }
