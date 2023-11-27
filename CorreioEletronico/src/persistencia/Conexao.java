@@ -25,6 +25,7 @@ public class Conexao {
         try {
             if(conexao!=null){
             conexao.close();
+            conexao = null;
         }
         } catch (Exception e) {
             throw new SQLException(e.getMessage());

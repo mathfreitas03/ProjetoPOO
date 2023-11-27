@@ -35,6 +35,8 @@ public class EmailDAO {
                 try(ResultSet rs = statement.executeQuery()){
                     if(rs.next()){
                         email.setId(rs.getInt(1));
+                        email.setCorpo(email.criptografar(email.getId(), email.getCorpo()));
+                        atualizarEmail(email);
                         
                     }
                 } 
@@ -44,7 +46,6 @@ public class EmailDAO {
         }
     }
 
-    /*
     public void atualizarEmail(Email email) {
         try {
             String comando = "update email set corpo = ?, assunto = ?, remetente = ?, destinatario = ? where id = ?";
@@ -60,7 +61,6 @@ public class EmailDAO {
             e.printStackTrace();
         }
     }
-    */
 
     public Email buscarEmailPorId(int id) {
         try {
@@ -71,7 +71,7 @@ public class EmailDAO {
                     if (resultSet.next()) {
                         Email email = new Email();
                         email.setId(resultSet.getInt("id"));
-                        email.setCorpo(resultSet.getString("corpo"));
+                        email.setCorpo(email.descriptografar(email.getId(), resultSet.getString("corpo")));
                         email.setAssunto(resultSet.getString("assunto"));
                         email.setRemetente(resultSet.getString("remetente"));
                         email.setDestinatario(resultSet.getString("destinatario"));
@@ -101,7 +101,7 @@ public class EmailDAO {
                 while (resultSet.next()) {
                     Email email = new Email();
                     email.setId(resultSet.getInt("id"));
-                    email.setCorpo(resultSet.getString("corpo"));
+                    email.setCorpo(email.descriptografar(email.getId(), resultSet.getString("corpo")));
                     email.setAssunto(resultSet.getString("assunto"));
                     email.setRemetente(resultSet.getString("remetente"));
                     email.setDestinatario(resultSet.getString("destinatario"));

@@ -39,8 +39,7 @@ public class Sistema {
     public Sistema() throws ClassNotFoundException, SQLException {
         usuarioDAO = new UsuarioDAO();
         emailDAO = new EmailDAO();
-        listaDeUsuarios = new ArrayList<>();
-        listaDeUsuarios = usuarioDAO.listarUsuarios();
+        listaDeUsuarios = new ArrayList<>(usuarioDAO.listarUsuarios());
     }
 
     public boolean cadastrarUsuario(String email, String senha, String nome) throws InvalidNickException, NotEnoughCaractersException, UserAlreadySignedException{
@@ -101,7 +100,7 @@ public class Sistema {
                 e.printStackTrace();
             }
         } finally {
-            //Conexao.fecharConexao();
+            
         }
     }
 }
